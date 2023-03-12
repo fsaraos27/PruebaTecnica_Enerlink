@@ -1,0 +1,25 @@
+.content {
+    display: flex;
+    justify-content: center;
+  }
+
+  .enter{
+    border-radius: 10px !important;
+    border-color: blue;
+    text-align: center;
+  }
+
+.crear{
+    background-color: blue;
+    border-radius: 20px;
+    border-color: skyblue;
+    color: white;
+    margin-top: -35px;
+    padding: 6px;
+    margin-left: 14px;
+    padding-left: 32px;
+    padding-right: 38px;
+    justify-content: center;
+}
+
+

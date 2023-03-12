@@ -1,4 +1,3 @@
-import React from "react";
 import TodoList from "./components/TodoList/TodoList";
 import TodoResult from "./components/TodoResults/TodoResult";
 import { Toaster } from 'react-hot-toast';
@@ -11,7 +10,7 @@ const App = () => {
     <div className="root">
       <TodoList />
       <Toaster  
-        position='top-center'
+        position='top-right'
         autoClose={1000}
         hideProgressBar
         newestOnTop

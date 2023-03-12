@@ -1,23 +1,23 @@
 import { useState } from "react";
-import { 
-  getTodosApi, 
-  addTablesApi, 
-  updateTableApi, 
-  deleteTableApi,} from "../api/todos";
+import { toast } from "react-hot-toast";
+import { getIdTareaApi } from "../../src/api/todos";
+
+//Hooks utilizados dentro de la aplicación para la comunicación con la API.
 
 export function useTodos(){
     const [todos, setTodos] = useState(null);
     const [todo, setTodo] = useState(null);
 
 
-    const getTodos = async () => {
-      const response = await fetch("https://my-json-server.typicode.com/AlvaroArratia/static-todos-api/todos/");
-      const data = await response.json();
-      //console.log(data);
-      return data;
-    };
+//Obtiene todas las tareas que se encuentran en la APi
+const getTodos = async () => {
+  const response = await fetch("https://my-json-server.typicode.com/AlvaroArratia/static-todos-api/todos/");
+  const data = await response.json();
+  return data;
+};
 
-    
+
+//Permite agregar las tareas a la API
 const addTodos = async (todo) => {
   try {
     const params = {
@@ -29,73 +29,79 @@ const addTodos = async (todo) => {
     };
     const response = await fetch("https://my-json-server.typicode.com/AlvaroArratia/static-todos-api/todos", params);
     const result = await response.json();
+    toast("Tarea agregada con Éxito");
     return result;
   } catch (error) {
+    toast("Ocurrió un error en la llamada");
     throw error;
   }
 }
 
+//permite editar las tareas de la API
+const updateTodo = async (todo) => {
+  try {
+    const todoId = await getIdTareaApi(todo);
 
-
-    /*
-    //Obtiene todas las mesas de la base de datos
-    const getTodos = async () => {
-        try {
-            const response = await getTodosApi();
-            setTodos(response);
-            //console.log(response);
-        } catch (error) {
-          throw(error)
-        }
-    };
-    */
-
-
-    /*
-    const addTables = async (data) => {
-      try {
-          setLoading(true);
-          await addTablesApi({...data }, auth.token);
-          setLoading(false);
-      } catch (error) {
-          setLoading(false);
-          setError(error);
-      }
-  };
-  
-  const updateTable = async (id, data) => {
-    try {
-        setLoading(true);
-        await updateTableApi(id, { ...data }, auth.token);
-        setLoading(false);
-    } catch (error) {
-        setLoading(false);
-        setError(error);
+    if (!todoId) {
+      console.log("No se encontró la tarea en la API");
+      return;
     }
+    
+    const params = {
+      method: "PUT",
+      headers:{
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(todo),
+    };
+    const response = await fetch(`https://my-json-server.typicode.com/AlvaroArratia/static-todos-api/todos/${todoId}`, params);
+    const result = await response.json();
+    toast("Tarea editada con Éxito");
+    return result;
+  } catch (error) {
+    toast("Ocurrió un error en la llamada");
+    throw error;
+  }
 };
 
-    
-    const deleteTables = async (id) => {
-        try {
-            setLoading(true);
-            await deleteTableApi(id, auth.token);
-            setLoading(false);
-        } catch (error) {
-            setLoading(false);
-            setError(error);
-        }
+
+
+//Permite eliminar una tarea de la API
+const deleteTarea = async (todo) => {
+  try {
+    const todoId = await getIdTareaApi(todo);//Se obtiene la tarea desde la APi
+
+    if (!todoId) {
+      console.log("No se encontró la tarea en la API");
+      return;
     }
-    */
+    
+    const params = {
+      method: "DELETE",
+      headers:{
+        "Content-Type": "application/json",
+      },
+      // Modifica el cuerpo para solo incluir el ID de la tarea
+      body: JSON.stringify({ id: todoId }),
+    };
+    const response = await fetch(`https://my-json-server.typicode.com/AlvaroArratia/static-todos-api/todos/${todoId}`, params);
+    const result = await response.json();
+    toast("Tarea eliminada con Éxito");
+    return result;
+  } catch (error) {
+    toast("Ocurrió un error en la llamada");
+    throw error;
+  }
+};
 
 
-    return{
+    return{//Se retornan las funciones para llamarlas en los componentes
         todos,
         todo,
         getTodos,
         addTodos,
-        //addTables,
-        //updateTable,
-        //deleteTables,
+        updateTodo,
+        deleteTarea,
     };
 
 }
