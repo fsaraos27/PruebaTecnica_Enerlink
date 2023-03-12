@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useTodos } from "hooks/useTodos";
-import { setTodos, closeTodoAction } from "../../Features/Todo/TodoSlice";
+import { closeTodoAction } from "../../Features/Todo/TodoSlice";
 import "./styles.css";
 
 function TodoResult() {
   const [closedTodosCount, setClosedTodosCount] = useState(0);
-  const { getTodos } = useTodos();
   const dispatch = useDispatch();
 
   const closedTodos = useSelector(closeTodoAction);

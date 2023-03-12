@@ -5,7 +5,10 @@ body {
   sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: linear-gradient(to top, rgb(114, 211, 250), #006983);
+  background-image: linear-gradient(to top, rgb(9, 24, 245), #00010e);
+  
+  box-shadow: 0px 0px 20px 0px rgba(2, 11, 94, 0.8);
+  -webkit-box-shadow: 0px 0px 20px 0px rgba(87, 144, 201, 0.8); 
   }
 
 .root {

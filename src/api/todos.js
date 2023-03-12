@@ -4,9 +4,9 @@ import { BASE_API } from "../utils/constants";
 export async function getTodosApi(){
     try {
         const url = `${BASE_API}/todos/`;
-        const response = await fetch(url);
-        const result = await response.json();
-        return result;
+        const respuesta = await fetch(url);
+        const resultado = await respuesta.json();
+        return resultado;
     } catch (error) {
         throw error;
     }
@@ -22,9 +22,9 @@ export async function getIdTareaApi(id) {
           "Content-Type": "application/json",
         },
       };
-      const response = await fetch(url, params);
-      const result = await response.json();
-      return result;
+      const respuesta = await fetch(url, params);
+      const resultado = await respuesta.json();
+      return resultado;
     } catch (error) {
       throw error;
     }

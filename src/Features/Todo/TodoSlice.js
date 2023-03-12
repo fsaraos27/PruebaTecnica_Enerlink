@@ -17,18 +17,6 @@ export const todosSlice = createSlice({
       state.todos.push({ label, checked });
     },    
 
-    deleteTodo: (state, action) => {//Elimina la tarea comparando el ID del state con el que está en payload en base al index de búsqueda
-      const todoFind = state.todos.find((todo) => todo.todoId === action.payload);
-      if (todoFind) {
-        const index = state.todos.indexOf(todoFind);
-        state.todos[index] = {
-          ...todoFind,
-          checked: !todoFind.checked
-        };
-      }
-      console.log(state.todos);
-    },
-
     editTodo: (state, action) => {//Edita la tarea clonando el objeto encontrado en el indice para cambiar el estado checked
       const todoFind = state.todos.find((todo) => todo.todoId === action.payload);
       if (todoFind) {
@@ -64,6 +52,18 @@ export const todosSlice = createSlice({
       } else {
         console.error("Error: Invalid payload received in setTodos().");
       }
+    },
+
+    deleteTodo: (state, action) => {//Elimina la tarea comparando el ID del state con el que está en payload en base al index de búsqueda
+      const todoFind = state.todos.find((todo) => todo.todoId === action.payload);
+      if (todoFind) {
+        const index = state.todos.indexOf(todoFind);
+        state.todos[index] = {
+          ...todoFind,
+          checked: !todoFind.checked
+        };
+      }
+      console.log(state.todos);
     },
     
     //Elimina una tarea de la vista guardandola en un estado cerrado

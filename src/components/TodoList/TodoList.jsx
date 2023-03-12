@@ -38,14 +38,34 @@ const TodoList = () => {
     del hook "useTodos" espera la respuesta para hacer un llamado a la API y eliminar la tarea.
   */
   const handleDelete = async (todoId) => {
-    const deletedTodos = apiTodos.map((tarea) =>
+    const eliminarTodos = apiTodos.map((tarea) =>
     tarea.id === todoId ? { ...tarea } : tarea
     );
-    setApiTodos(deletedTodos);
+    setApiTodos(eliminarTodos);
     await deleteTarea(todoId);
-    const deletedTodo = deletedTodos.find((tarea) => tarea.id === todoId);
-    dispatch(deleteTodo({ todoId, ...deletedTodo }));
+    const eliminaTarea = eliminarTodos.find((tarea) => tarea.id === todoId);
+    dispatch(deleteTodo({ todoId, ...eliminaTarea }));
+    dispatch(closeTodoAction({ todoId, ...eliminaTarea }));
   };
+
+
+
+    /*
+    Esta función no realiza llamado a la API y la funcionalidad es similar a la función del checked, con la diferencia que quita la tarea de la vista, 
+    valida que no se pueda cerrar si el check no está marcado. Se guarda en una acción especial dentro del Store llamada "closeTodoAction"
+  */
+    const handleClose = (todoId) => {
+      const todo = apiTodos.find((todo) => todo.id === todoId);
+      if (todo.checked) {
+        const actualizarTarea = apiTodos.filter((todo) => todo.id !== todoId);
+        setApiTodos(actualizarTarea);
+        console.log(actualizarTarea);
+        dispatch(closeTodoAction(todo));
+      }else{
+        toast("Para Cerrar la tarea, primero activa el Check para tacharla");
+      }
+    };
+
   
 
 
@@ -56,51 +76,33 @@ const TodoList = () => {
     Se aplica el "textDecoration" en las propiedades del div para tachar el texto.
   */
   const handleCheck = async (todoId, todo) => {
-    const updatedTodos = apiTodos.map((todo) =>
+    const actualizarTodos = apiTodos.map((todo) =>
       todo.id === todoId ? { ...todo, checked: !todo.checked } : todo
     );
-    setApiTodos(updatedTodos);
+    setApiTodos(actualizarTodos);
     await updateTodo(todo); // Espera a que se complete la llamada a la API
-    const updatedTodo = updatedTodos.find((todo) => todo.id === todoId);
-    dispatch(editTodo({ todoId, ...updatedTodo }));
-  };
-  
-  
-
-  /*
-    Esta función no realiza llamado a la API y la funcionalidad es similar a la función del checked, con la diferencia que quita la tarea de la vista, 
-    valida que no se pueda cerrar si el check no está marcado. Se guarda en una acción especial dentro del Store llamada "closeTodoAction"
-  */
-  const handleClose = (todoId) => {
-    const todo = apiTodos.find((todo) => todo.id === todoId);
-    if (todo.checked) {
-      const updatedTodos = apiTodos.filter((todo) => todo.id !== todoId);
-      setApiTodos(updatedTodos);
-      console.log(updatedTodos);
-      dispatch(closeTodoAction(todo));
-    }else{
-      toast("Para Cerrar la tarea, primero activa el Check para tacharla");
-    }
+    const actualizaTarea = actualizarTodos.find((todo) => todo.id === todoId);
+    dispatch(editTodo({ todoId, ...actualizaTarea }));
   };
   
 
   return (
     <div>
       <span className="todo-list-title"> | Things to do</span>
-      <Button style={{ 
+      <Button className="mostrar" style={{ 
                       textDecoration: "none",
-                      borderRadius: 5,
+                      borderRadius: 25,
                       padding: 7,
-                      boxShadow: "6px 3px 5px rgba(0, 0, 0, 0.9)",
-                      marginRight: 10,
+                      boxShadow: "3px 2px 5px rgba(124, 204, 250, 0.4)",
+                      marginRight: 30,
                       background: "green",
                       color: "white"
                     }} onClick={() => getNotesApi()}>Mostrar Tareas</Button>
       <Button style={{ 
                       textDecoration: "none",
-                      borderRadius: 5, 
+                      borderRadius: 25, 
                       padding: 7,
-                      boxShadow: "6px 3px 5px rgba(0, 0, 0, 0.9)",
+                      boxShadow: "3px 2px 5px rgba(124, 204, 250, 0.4)",
                       background: "gray",
                       color: "white"
                     }} onClick={() => /*Se llama a la función para limpiar la vista */ setApiTodos([])}>Limpiar Vista</Button>
@@ -118,13 +120,12 @@ const TodoList = () => {
                       alignItems: "center",
                       justifyContent: "space-between",
                       margin: "100px 0",
-                      borderRadius: "10px",
-                      border: "3px solid white",
+                      borderRadius: "44px",
+                      border: "2px solid white",
                       padding: "50px",
                       width: "830px",
-                      background: "#00A3FA",
                       textDecoration: todo.checked ? "line-through" : "none",
-                      boxShadow: "20px 33px 35px rgba(0, 0, 0, 0.9)",
+                      boxShadow: "0px 0px 35px rgba(124, 204, 250, 0.4)",
                     }}
                   >
                     <Checkbox
@@ -136,22 +137,22 @@ const TodoList = () => {
                       <p style={{fontSize: 20}}>{todo.label}</p>
                     </div>
                     <div>
-                      <Button 
+                      <Button className="eliminar"
                             style={{ 
                                     textDecoration: "none",
                                     borderRadius: 5, 
                                     padding: 7,
-                                    boxShadow: "6px 3px 5px rgba(0, 0, 0, 0.9)"
+                                    boxShadow: "1px 1px 5px rgba(124, 204, 250, 0.4)"
                                   }} onClick={() => handleClose(todo.id)}>Cerrar</Button>
                       <p></p>
-                      <Button 
+                      <Button className="eliminar"
                             style={{ 
                                     textDecoration: "none", 
                                     background: "red", 
                                     borderRadius: 5, 
                                     padding: 7,
                                     color: "white",
-                                    boxShadow: "6px 3px 5px rgba(0, 0, 0, 0.9)"
+                                    boxShadow: "1px 1px 5px rgba(124, 204, 250, 0.4)"
                                   }} onClick={() => handleDelete(todo.id)}>Eliminar</Button>
                     </div>
                   </div>

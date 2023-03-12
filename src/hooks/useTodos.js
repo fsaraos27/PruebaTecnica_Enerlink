@@ -11,8 +11,8 @@ export function useTodos(){
 
 //Obtiene todas las tareas que se encuentran en la APi
 const getTodos = async () => {
-  const response = await fetch("https://my-json-server.typicode.com/AlvaroArratia/static-todos-api/todos/");
-  const data = await response.json();
+  const respuesta = await fetch("https://my-json-server.typicode.com/AlvaroArratia/static-todos-api/todos/");
+  const data = await respuesta.json();
   return data;
 };
 
@@ -27,10 +27,10 @@ const addTodos = async (todo) => {
       },
       body: JSON.stringify(todo),
     };
-    const response = await fetch("https://my-json-server.typicode.com/AlvaroArratia/static-todos-api/todos", params);
-    const result = await response.json();
+    const respuesta = await fetch("https://my-json-server.typicode.com/AlvaroArratia/static-todos-api/todos", params);
+    const resultado = await respuesta.json();
     toast("Tarea agregada con Éxito");
-    return result;
+    return resultado;
   } catch (error) {
     toast("Ocurrió un error en la llamada");
     throw error;
@@ -54,10 +54,10 @@ const updateTodo = async (todo) => {
       },
       body: JSON.stringify(todo),
     };
-    const response = await fetch(`https://my-json-server.typicode.com/AlvaroArratia/static-todos-api/todos/${todoId}`, params);
-    const result = await response.json();
+    const respuesta = await fetch(`https://my-json-server.typicode.com/AlvaroArratia/static-todos-api/todos/${todoId}`, params);
+    const resultado = await respuesta.json();
     toast("Tarea editada con Éxito");
-    return result;
+    return resultado;
   } catch (error) {
     toast("Ocurrió un error en la llamada");
     throw error;
@@ -84,10 +84,10 @@ const deleteTarea = async (todo) => {
       // Modifica el cuerpo para solo incluir el ID de la tarea
       body: JSON.stringify({ id: todoId }),
     };
-    const response = await fetch(`https://my-json-server.typicode.com/AlvaroArratia/static-todos-api/todos/${todoId}`, params);
-    const result = await response.json();
+    const respuesta = await fetch(`https://my-json-server.typicode.com/AlvaroArratia/static-todos-api/todos/${todoId}`, params);
+    const resultado = await respuesta.json();
     toast("Tarea eliminada con Éxito");
-    return result;
+    return resultado;
   } catch (error) {
     toast("Ocurrió un error en la llamada");
     throw error;

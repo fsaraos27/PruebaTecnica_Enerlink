@@ -23,16 +23,16 @@ export function TodoForm() {
   */
   const handleSubmit = async (data) => {
     data.preventDefault();
-    const newTodo = {...todo, todoId: uuidv4(),
+    const nuevoTodo = {...todo, todoId: uuidv4(),
     };
-    await addTodos(newTodo);
-    dispatch(addTodo(newTodo));
+    await addTodos(nuevoTodo);
+    dispatch(addTodo(nuevoTodo));
     setTodo({
       todoId: "",
       label: "",
       checked: false,
     });
-    console.log(newTodo);
+    console.log(nuevoTodo);
   };
   
   
@@ -45,7 +45,7 @@ export function TodoForm() {
         <Form onSubmit={handleSubmit}>
           <TextArea style={{ 
                       textDecoration: "none",
-                      boxShadow: "3px 3px 5px rgba(0, 0, 0, 0.9)",
+                      boxShadow: "7px 5px 5px rgba(17, 1, 1, 0.4",
                       marginTop: 20
                     }} className="enter"
             name="label"
@@ -54,11 +54,11 @@ export function TodoForm() {
             onChange={handleChange}
           />
           <div style={{ 
-                        marginTop: 10,
+                        marginTop: 20,
                     }}>
           <Button style={{ 
                       textDecoration: "none",
-                      boxShadow: "6px 3px 5px rgba(0, 0, 0, 0.9)",
+                      boxShadow: "7px 5px 5px rgba(17, 1, 1, 0.4)"
                     }} className="crear"
               type="submit"
               content="Crear tarea"
