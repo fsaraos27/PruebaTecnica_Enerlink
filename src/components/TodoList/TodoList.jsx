@@ -1,7 +1,7 @@
 import "./TodoList.css";
 import { useState, useEffect } from "react";
 import { Button, Checkbox } from "semantic-ui-react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteTodo, setTodos, closeTodoAction, editTodo } from "../../Features/Todo/TodoSlice";//Se importan las "Acciones" desde el Slice "Store"
 import { TodoForm } from "../../components/TodoForm/TodoForm";
 import { useTodos } from "hooks/useTodos";//Se importa el Hook para acceder a la API si es necesario.
@@ -9,8 +9,17 @@ import { toast } from "react-hot-toast";
 
 const TodoList = () => {
   const { getTodos, updateTodo, deleteTarea } = useTodos();
+  const [closedTodosCount, setClosedTodosCount] = useState(0);
   const [apiTodos, setApiTodos] = useState([]);//Se inicializa un estado array para manejar las tareas desde el Store.
   const dispatch = useDispatch();
+
+  const closedTodos = useSelector(closeTodoAction);
+
+
+  useEffect(() => {
+    setClosedTodosCount(apiTodos.filter(todo => todo.checked).length);//Cuento la cantidad de elemntos que tienen el "checked" en true
+  }, [apiTodos]);
+
 
   useEffect(() => {//Se ejecuta la funcion getNoteApi para mostrar las tareas de la Api en cuanto carga la página.
     getNotesApi();
@@ -37,16 +46,16 @@ const TodoList = () => {
     handleDelete crea una copia de la matriz y la guarda localmente para eliminar una tarea en base a su ID, la función "await deleteTarea" 
     del hook "useTodos" espera la respuesta para hacer un llamado a la API y eliminar la tarea.
   */
-  const handleDelete = async (todoId) => {
-    const eliminarTodos = apiTodos.map((tarea) =>
-    tarea.id === todoId ? { ...tarea } : tarea
-    );
-    setApiTodos(eliminarTodos);
-    await deleteTarea(todoId);
-    const eliminaTarea = eliminarTodos.find((tarea) => tarea.id === todoId);
-    dispatch(deleteTodo({ todoId, ...eliminaTarea }));
-    dispatch(closeTodoAction({ todoId, ...eliminaTarea }));
-  };
+    const handleDelete = async (todoId) => {
+      const eliminarTodos = apiTodos.map((tarea) =>
+        tarea.id === todoId ? { ...tarea } : tarea
+      );
+      setApiTodos(eliminarTodos);
+      await deleteTarea(todoId);
+      const eliminaTarea = eliminarTodos.find((tarea) => tarea.id === todoId);
+      dispatch(deleteTodo({ todoId, ...eliminaTarea }));
+      dispatch(closeTodoAction({ todoId, ...eliminaTarea }));
+    };
 
 
 
@@ -61,7 +70,7 @@ const TodoList = () => {
         setApiTodos(actualizarTarea);
         console.log(actualizarTarea);
         dispatch(closeTodoAction(todo));
-      }else{
+      } else {
         toast("Para Cerrar la tarea, primero activa el Check para tacharla");
       }
     };
@@ -75,15 +84,15 @@ const TodoList = () => {
     Seguido de la función "updatetodo" que realiza un llamado a la API con la actualización en la propiedad. Finalizando con el dispatch para actualizar el estado en la Store.
     Se aplica el "textDecoration" en las propiedades del div para tachar el texto.
   */
-  const handleCheck = async (todoId, todo) => {
-    const actualizarTodos = apiTodos.map((todo) =>
-      todo.id === todoId ? { ...todo, checked: !todo.checked } : todo
-    );
-    setApiTodos(actualizarTodos);
-    await updateTodo(todo); // Espera a que se complete la llamada a la API
-    const actualizaTarea = actualizarTodos.find((todo) => todo.id === todoId);
-    dispatch(editTodo({ todoId, ...actualizaTarea }));
-  };
+    const handleCheck = async (todoId, todo) => {
+      const actualizarTodos = apiTodos.map((todo) =>
+        todo.id === todoId ? { ...todo, checked: !todo.checked } : todo
+      );
+      setApiTodos(actualizarTodos);
+      await updateTodo(todo);
+      const actualizaTarea = actualizarTodos.find((todo) => todo.id === todoId);
+      dispatch(editTodo({ todoId, ...actualizaTarea }));
+    };
   
 
   return (
@@ -166,6 +175,10 @@ const TodoList = () => {
         ) : (
           <div className="no-todos">Looks like you&apos;re absolutely free today!</div>
         )}
+
+      <div className="todo-results">
+        <h3>Closed Notes: {/*Muestro la cantidad de elementos con el checked en true*/} {closedTodosCount}</h3>
+      </div>
     </div>
   );
 }

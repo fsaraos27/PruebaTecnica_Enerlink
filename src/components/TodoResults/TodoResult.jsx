@@ -16,7 +16,6 @@ function TodoResult() {
 
   return (
     <div className="todo-results">
-      <h3>Closed Notes: {closedTodosCount}</h3>
     </div>
   );
 }
